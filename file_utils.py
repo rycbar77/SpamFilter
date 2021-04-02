@@ -21,12 +21,12 @@ def init_bigdata_test_files():
                 ham_list.append(file)
             else:
                 spam_list.append(file)
-    ham_list = random.sample(ham_list, 500)
+    ham_list = random.sample(ham_list, 1000)
     random.shuffle(ham_list)
     train_size = int(len(ham_list) * 0.8)
     train_ham_list = ham_list[:train_size]
     test_ham_list = ham_list[train_size:]
-    spam_list = random.sample(spam_list, 500)
+    spam_list = random.sample(spam_list, 1000)
     random.shuffle(spam_list)
     train_size = int(len(spam_list) * 0.8)
     train_spam_list = spam_list[:train_size]

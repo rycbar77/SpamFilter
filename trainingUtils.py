@@ -14,7 +14,7 @@ def create_vocab_list(dataSet):
 
 # 读取文件，特征提取
 def load_file(path):
-    cab = []
+    words = []
     tfidf = TFIDF()
     tags = []
     for lists in os.listdir(path):
@@ -27,15 +27,15 @@ def load_file(path):
             tmp2 = tfidf.extract_tags_from_words(tmp)
             if len(tmp2) > 30:
                 tmp2 = tmp2[:30]
-            cab.append(tmp)
+            words.append(tmp)
             tags.append(tmp2)
     vocab = create_vocab_list(tags)
-    return cab, vocab
+    return words, vocab
 
 
 # 大数据集用
 def load_file_from_list(lists):
-    cab = []
+    words = []
     tags = []
     tfidf = TFIDF()
     for l in lists:
@@ -45,9 +45,9 @@ def load_file_from_list(lists):
             tmp2 = tfidf.extract_tags_from_words(tmp)
             if len(tmp2) > 30:
                 tmp2 = tmp2[:30]
-            cab.append(tmp)
+            words.append(tmp)
             tags.append(tmp2)
-    print("loaded!!!")
+    print("loaded %d files!!!" % len(lists))
     vocab = create_vocab_list(tags)
-    print("vectorized!!!")
-    return cab, vocab
+    print("vectorized!!! total: %d" % len(vocab))
+    return words, vocab

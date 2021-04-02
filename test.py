@@ -6,6 +6,7 @@ from file_utils import init_bigdata_test_files
 from configs import *
 import matplotlib.pyplot as plt
 from svm import svm_unit_test
+import numpy as np
 
 
 # from sklearn.naive_bayes import GaussianNB
@@ -80,6 +81,12 @@ def test_bigdata(model='mul'):
             correct += 1
         # else:
         #     log.write("failed: %s\n" % (test_spam_list[i - 5044] if i >= 5044 else test_ham_list[i]))
+    predicted_spam = np.count_nonzero(res)
+    predicted_ham = len(res) - predicted_spam
+    real_spam = np.count_nonzero(y_test)
+    real_ham = len(y_test) - real_spam
+    print("predict spam: %d\n real spam: %d" % (predicted_spam, real_spam))
+    print("predict ham : %d\n real ham : %d" % (predicted_ham, real_ham))
     print("准确率：%.2f" % (correct / len(res)))
     return correct / len(res)
 
@@ -92,7 +99,9 @@ if __name__ == '__main__':
     unit_test('bern')
     svm_unit_test()
     plt.show()
+    # print("\n---------------BernoulliNB----------------\n")
     # test_bigdata('bern')
+    # print("\n--------------MultinomialNB---------------\n")
     # test_bigdata()
     log.write("---------------------------------------------\n\n")
     log.close()

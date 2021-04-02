@@ -1,8 +1,4 @@
-import _io
-import copy
 import email
-from email.parser import BytesParser, Parser
-from email.policy import default
 from html import unescape
 import re
 from nltk.stem.porter import PorterStemmer

@@ -29,7 +29,9 @@ class MultinomialNB(object):
         return self.vectorize(words_ham, words_spam, vocab_ham, vocab_spam, train)
 
     def make_vec_from_list(self, ham_list, spam_list, train=False):
+        print("loading ham files...")
         words_ham, vocab_ham = load_file_from_list(ham_list)
+        print("loading spam files...")
         words_spam, vocab_spam = load_file_from_list(spam_list)
         return self.vectorize(words_ham, words_spam, vocab_ham, vocab_spam, train)
 
@@ -39,16 +41,16 @@ class MultinomialNB(object):
             self.vocab = vocab_ham | vocab_spam
         else:
             tmp = (vocab_ham | vocab_spam) - self.vocab
-        vo = list(self.vocab) + list(tmp)
+        self.vo = list(self.vocab) + list(tmp)
         labels = []
         X = []
         for document in words_ham:
             labels.append(0)
-            X.append(self.words2vec(vo, document))
+            X.append(self.words2vec(self.vo, document))
 
         for document in words_spam:
             labels.append(1)
-            X.append(self.words2vec(vo, document))
+            X.append(self.words2vec(self.vo, document))
 
         X = np.array(X)
         y = np.array(labels)
@@ -60,7 +62,7 @@ class MultinomialNB(object):
         # P( xj | y=ck )
         self.conditional_prob = {}
         for c in self.classes:
-            self.conditional_prob[c] = {}
+            self.conditional_prob[c] = defaultdict(lambda: defaultdict(lambda: 0.5))
             for i in range(len(X[0])):
                 feature = X[np.equal(y, c)][:, i]
                 # print(np.equal(y,c))
@@ -94,11 +96,12 @@ class MultinomialNB(object):
             current_prior = self.prior_prob[c_index]
             conditional_prob = 1.0
             feature_prob = self.conditional_prob[self.classes[c_index]]
+            # print(feature_prob)
             j = 0
-            for feature_i in feature_prob.keys():
+            for feature_i in range(len(feature_prob)):
+                # print(feature_i)
                 conditional_prob *= feature_prob[feature_i][x[j]]
                 j += 1
-
             if current_prior * conditional_prob > max_prob:
                 max_prob = current_prior * conditional_prob
                 label = self.classes[c_index]
