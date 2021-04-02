@@ -1,6 +1,5 @@
 from multinomialNB import MultinomialNB
 from bernoulliNB import BernoulliNB
-from gaussianNB import GaussianNB
 from file_utils import init_test_files
 from file_utils import get_files
 from file_utils import init_bigdata_test_files
@@ -9,12 +8,14 @@ import matplotlib.pyplot as plt
 from svm import svm_unit_test
 
 
+# from sklearn.naive_bayes import GaussianNB
+
 # 单个测试
 def test(model='mul'):
     if model == 'bern':
         test_model = BernoulliNB(alpha=1.0)
-    elif model == 'gau':
-        test_model = GaussianNB(alpha=1.0)
+    # elif model == 'gau':
+    #     test_model = GaussianNB()
     else:
         test_model = MultinomialNB(alpha=1.0)
     init_test_files()
@@ -57,8 +58,8 @@ def unit_test(model='mul'):
 def test_bigdata(model='mul'):
     if model == 'bern':
         test_model = BernoulliNB(alpha=1.0)
-    elif model == 'gau':
-        test_model = GaussianNB(alpha=1.0)
+    # elif model == 'gau':
+    #     test_model = GaussianNB()
     else:
         test_model = MultinomialNB(alpha=1.0)
     print("Random pick!!!")

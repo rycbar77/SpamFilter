@@ -6,7 +6,7 @@ from configs import *
 
 
 # 随机选择数据集，划分训练集和测试集
-def init_bigdata_test_files():  # 初始化，按照设定比率，随机选择测试集和训练集
+def init_bigdata_test_files():
     # file_list = get_files(bigdata_path)
     ham_list = []
     spam_list = []

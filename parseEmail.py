@@ -14,13 +14,14 @@ STOP_WORDS = {"the", "of", "is", "and", "to", "in", "that", "we", "for", "an", "
 
 def get_stop_words():
     # print('\n\n\n111\n\n\n')
+    stemmer = PorterStemmer()
     with open('./preprocessing/english', 'r', encoding='utf-8') as f:
         # print('\n\n\n111\n\n\n')
         while True:
             line = f.readline()
             if not line:
                 break
-            s = line.strip()
+            s = stemmer.stem(line.strip())
             # print(s)
             STOP_WORDS.add(s)
 
@@ -44,7 +45,7 @@ def text_parse(text):
     list_of_tokens = re.split(r'[^\w]', text)
     stemmer = PorterStemmer()
 
-    list_of_tokens = [stemmer.stem(i) for i in list_of_tokens if i != '']
+    list_of_tokens = [stemmer.stem(i.lower()) for i in list_of_tokens if i != '']
 
     # print(list_of_tokens)
     return [tok.lower() for tok in list_of_tokens if len(tok) > 2 and tok.lower() not in STOP_WORDS]
@@ -60,7 +61,7 @@ def html_parse(text):
     list_of_tokens = re.split(r'[^\w]', text)
     stemmer = PorterStemmer()
 
-    list_of_tokens = [stemmer.stem(i) for i in list_of_tokens if i != '']
+    list_of_tokens = [stemmer.stem(i.lower()) for i in list_of_tokens if i != '']
 
     # print(list_of_tokens)
     return [tok.lower() for tok in list_of_tokens if len(tok) > 2 and tok.lower() not in STOP_WORDS]
@@ -93,20 +94,8 @@ def get_file(msg):
 
 
 def mail_parse(text):
-    # msg = Parser().parsestr(text)
-    # type = msg.get_content_type()
-    # msg.get_content_charset()
     msg = email.message_from_bytes(text)
     html = get_file(msg)
-    # print(html)
-    # try:
-    #     html = "".join([str(i).replace('_', '') for i in s])
-    # except UnicodeEncodeError:
-    #     for i in s:
-    #         print(i)
-    #     return
-    # if type != 'text/plain':
-    # print(html)
     return html_parse(html)
 
 
