@@ -1,7 +1,7 @@
 from sklearn.svm import LinearSVC
 from trainingUtils import load_file
 import numpy as np
-from file_utils import init_test_files
+from trainingUtils import init_test_files
 from configs import *
 import matplotlib.pyplot as plt
 
@@ -48,23 +48,40 @@ def test_svm():
     model.fit(X, y)
 
     res = model.predict(X_test)
-    correct = 0
+    correct = [0, 0, 0, 0]  # TP,TN,FN,FP
     for i in range(len(y_test)):
         if res[i] == y_test[i]:
-            correct += 1
+            if y_test[i] == 0:
+                correct[0] += 1
+            else:
+                correct[1] += 1
+        else:
+            if y_test[i] == 0:
+                correct[2] += 1
+            else:
+                correct[3] += 1
+    acc = float(correct[0] + correct[1]) / len(res)
+    rec = float(correct[0]) / (correct[0] + correct[2])
+    pec = float(correct[0]) / (correct[0] + correct[3])
+    f1 = (2 * pec * rec) / (pec + rec)
+    print("准确率：%.2f ;召回率：%.2f ;精确率：%.2f ;F1 Score：%.2f" % (acc, rec, pec, f1))
 
-    print("准确率：%.2f" % (correct / len(res)))
-    return correct / len(res)
+    return [acc, rec, pec, f1]
 
 
 def svm_unit_test():
-    correct = []
+    correct = np.zeros(4)
+    acc = []
     for i in range(50):
-        correct.append(test_svm())
-    print("平均准确率： %.2f" % (sum(correct) / 50))
+        res = test_svm()
+        acc.append(res[0])
+        correct += np.array(res)
+    correct /= 50
+    print("\n平均准确率：%.2f ;平均召回率：%.2f ;平均精确率：%.2f ;平均 F1 Score：%.2f" % (
+        correct[0], correct[1], correct[2], correct[3]))
     print("\n------------------------------------------\n")
     x = [x for x in range(1, 50 + 1)]
-    y = correct[:]
+    y = acc[:]
     plt.scatter(x, y)
 
 
